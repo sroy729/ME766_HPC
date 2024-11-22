@@ -1,7 +1,7 @@
 #Compiler
 CXX = g++
 
-CXXFLAGS =
+CXXFLAGS = -pg
 
 #Target executable
 TARGET_SERIAL = mul
@@ -24,7 +24,7 @@ openmp:
 	$(CXX) $(CXXFLAGS) -o $(TARGET_OPENMP) $(SRCS_OPENMP)
 
 mpi:
-	mpicc $(SRCS_MPI) -o $(TARGET_MPI)
+	mpicc -pg $(SRCS_MPI) -o $(TARGET_MPI) #-pg flags for gprof
 # clean up object files and the execution 
 clean: 
 	rm -f $(TARGET_SERIAL) $(TARGET_OPENMP) $(TARGET_MPI)
