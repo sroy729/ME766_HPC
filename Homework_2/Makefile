@@ -4,24 +4,30 @@ CXX = g++
 CXXFLAGS =
 
 #Target executable
-TARGET = mul
+TARGET_SERIAL = mul
+TARGET_OPENMP = mul_openmp
+TARGET_MPI = mul_mpi
 
-SRCS = $(wildcard *.c)
+SRCS_SERIAL = mul.c 
+SRCS_OPENMP = mul_openMP.c 
+SRCS_MPI = mul_mpi.c 
 
-#Object file
-OBJS = $(SRCS:.c=.o)
+all: serial openmp mpi
 
-#Rule to build the target executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+#Rule to build the serial code
+serial: 
+	$(CXX) $(CXXFLAGS) -o $(TARGET_SERIAL) $(SRCS_SERIAL)
 
-# Rule to compile .c file into .o files
-%.o: %.c
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+#rule to build the openmp code
+openmp: CXXFLAGS += -fopenmp
+openmp: 
+	$(CXX) $(CXXFLAGS) -o $(TARGET_OPENMP) $(SRCS_OPENMP)
 
+mpi:
+	mpicc $(SRCS_MPI) -o $(TARGET_MPI)
 # clean up object files and the execution 
 clean: 
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(TARGET_SERIAL) $(TARGET_OPENMP) $(TARGET_MPI)
 
 #phony targets to prevent issues with files named clean and all
 .PHONY: clean all
